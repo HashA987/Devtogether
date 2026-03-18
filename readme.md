@@ -67,8 +67,28 @@ Created dataabase connection file in backend services auth src utils db.ts
         -app.ts: we create express app and use middlewares and routes
         -controllers: we keep business logic for API endpoints
         -libs: we keep helper functions and other libraries
+        -Appcontext: folder is usually created to store React Context logic used for managing global state across the applicatio
 
         questions:  express dotenv jsonwebtoken cors datauri multer @neondatabase/serverless fileBuffer what are they used for?
+       -Express.js
+         A Node.js web framework used to build backend servers and APIs, Handles routes, requests, and responses.
+        -dotenv
+        Loads environment variables from a .env file.
+        -jsonwebtoken
+           -Used to create and verify JWT tokens for authentication,Helps keep users logged in securely.
+
+         -cors
+           Enables Cross-Origin Resource Sharing, Allows your frontend and backend on different domains to communicate.
+
+          Data URI
+          Converts files (like images) into base64 strings.Often used when uploading images to cloud services.
+
+          Multer
+         Middleware used to handle file uploads in Node.js.
+
+           fileBuffer
+           A buffer is binary data stored in memory.
+             Used when working with uploaded files before saving or processing them.
 
 ## day5-coding-sunday
 
@@ -124,4 +144,13 @@ Created dataabase connection file in backend services auth src utils db.ts
 
 ## day-13
 
-## -updated profile pic
+-updated profile pic
+
+## day-14
+
+-update resume
+-userprofile updated
+-Addes userskill
+-add my skills
+
+-

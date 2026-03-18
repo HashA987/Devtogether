@@ -11,6 +11,12 @@ export const isAuth = async (req, res, next) => {
             return;
         }
         const token = authHeader.split(" ")[1];
+        if (!token) {
+            res.status(401).json({
+                message: "No JWT token provided",
+            });
+            return;
+        }
         const decodedPayload = jwt.verify(token, process.env.JWT_SEC);
         if (!decodedPayload || !decodedPayload.id) {
             res.status(401).json({

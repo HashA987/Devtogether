@@ -67,9 +67,6 @@ export const updateUserProfile = TryCatch(
 export const updateProfilePic = TryCatch(
   async (req: AuthenticatedRequest, res) => {
     console.log("updateProfilePic called");
-    console.log("req.file:", req.file);
-    console.log("req.body:", req.body);
-    console.log("req.headers:", req.headers);
 
     const user = req.user;
     if (!user) {
@@ -87,20 +84,18 @@ export const updateProfilePic = TryCatch(
     console.log("Old public ID:", oldPublicId);
 
     const fileBuffer = getBuffer(file);
-    console.log("File buffer:", fileBuffer);
+    // console.log("File buffer:", fileBuffer);
 
     if (!fileBuffer || !fileBuffer.content) {
       throw new ErrorHandler(500, "failed to generate");
     }
 
     console.log("Uploading to cloud...");
-    const { data: uploadResult } = await axios.post(
-      `${process.env.UPLOAD_SERVICE}/api/utils/upload`,
-      {
+    const { data: uploadResult }: { data: { url: string; public_id: string } } =
+      await axios.post(`${process.env.UPLOAD_SERVICE}/api/utils/upload`, {
         buffer: fileBuffer.content,
         public_id: oldPublicId,
-      },
-    );
+      });
 
     console.log("Upload result:", uploadResult);
 
@@ -136,13 +131,11 @@ export const updateResume = TryCatch(async (req: AuthenticatedRequest, res) => {
   if (!fileBuffer || !fileBuffer.content) {
     throw new ErrorHandler(500, "failed to generate");
   }
-  const { data: uploadResult } = await axios.post(
-    `${process.env.UPLOAD_SERVICE}/api/utils/upload`,
-    {
+  const { data: uploadResult }: { data: { url: string; public_id: string } } =
+    await axios.post(`${process.env.UPLOAD_SERVICE}/api/utils/upload`, {
       buffer: fileBuffer.content,
       public_id: oldPublicId,
-    },
-  );
+    });
 
   const [updatedUser] = await sql`
     UPDATE users SET resume = ${uploadResult.url},resume_public_id = ${uploadResult.public_id}
@@ -329,8 +322,24 @@ export const getAllapplications = TryCatch(
     const applications = await sql`
   SELECT a.*, j.title AS job_title,j.salary,j.location AS
   job_location FROM applications a JOIN jobs j ON a.job_id = j.job_id
-  WHERE a.applicant_id = ${req.user?.user_id} `;
+WHERE a.applicant_id = ${req.user?.user_id} `;
 
     res.json({ applications });
   },
 );
+
+export const forgotPassword = TryCatch(async (req, res) => {
+  const { email } = req.body;
+  if (!email) {
+    throw new ErrorHandler(400, "Email required");
+  }
+  const users = await sql`SELECT user_id FROM users WHERE email = ${email}`;
+  if (users.length === 0) {
+    throw new ErrorHandler(404, "No user with that email");
+  }
+  // TODO: Generate token, hash it, update users.reset_token and reset_password_expiry, send email with reset link
+  res.status(200).json({
+    success: true,
+    message: "Password reset link has been sent to your email",
+  });
+});

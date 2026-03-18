@@ -8,7 +8,7 @@ router.delete("/company/:companyId", isAuth, deleteCompany);
 router.post("/new", isAuth, createJob);
 router.put("/:jobId", isAuth, upadateJob);
 router.get("/company/all", isAuth, getAllCompany);
-router.get("/company/:id", isAuth, getCompanyDetails);
+router.get("/company/:id", getCompanyDetails);
 router.get("/all", getAllActiveJobs);
 router.get("/application/:jobId", isAuth, getAllApplicationForJob);
 router.get("/:jobId", getSingleJob);

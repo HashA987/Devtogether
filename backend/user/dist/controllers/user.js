@@ -44,9 +44,6 @@ export const updateUserProfile = TryCatch(async (req, res) => {
 });
 export const updateProfilePic = TryCatch(async (req, res) => {
     console.log("updateProfilePic called");
-    console.log("req.file:", req.file);
-    console.log("req.body:", req.body);
-    console.log("req.headers:", req.headers);
     const user = req.user;
     if (!user) {
         throw new ErrorHandler(401, "Authentication required");
@@ -59,7 +56,7 @@ export const updateProfilePic = TryCatch(async (req, res) => {
     const oldPublicId = user.profile_pic_public_id;
     console.log("Old public ID:", oldPublicId);
     const fileBuffer = getBuffer(file);
-    console.log("File buffer:", fileBuffer);
+    // console.log("File buffer:", fileBuffer);
     if (!fileBuffer || !fileBuffer.content) {
         throw new ErrorHandler(500, "failed to generate");
     }
@@ -234,6 +231,21 @@ export const getAllapplications = TryCatch(async (req, res) => {
     const applications = await sql `
   SELECT a.*, j.title AS job_title,j.salary,j.location AS
   job_location FROM applications a JOIN jobs j ON a.job_id = j.job_id
-  WHERE a.applicant_id = ${req.user?.user_id} `;
+WHERE a.applicant_id = ${req.user?.user_id} `;
     res.json({ applications });
+});
+export const forgotPassword = TryCatch(async (req, res) => {
+    const { email } = req.body;
+    if (!email) {
+        throw new ErrorHandler(400, "Email required");
+    }
+    const users = await sql `SELECT user_id FROM users WHERE email = ${email}`;
+    if (users.length === 0) {
+        throw new ErrorHandler(404, "No user with that email");
+    }
+    // TODO: Generate token, hash it, update users.reset_token and reset_password_expiry, send email with reset link
+    res.status(200).json({
+        success: true,
+        message: "Password reset link has been sent to your email",
+    });
 });
