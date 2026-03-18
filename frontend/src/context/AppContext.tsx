@@ -10,10 +10,13 @@ import Cookies from "js-cookie";
 import axios from "axios";
 
 export const utils_service =
-  process.env.UTILS_SERVICE || "http://localhost:5001";
-export const auth_service = process.env.AUTH_SERVICE || "http://localhost:5000";
-export const user_service = process.env.USER_SERVICE || "http://localhost:5002";
-export const job_service = process.env.JOB_SERVICE || "http://localhost:5003";
+  process.env.NEXT_PUBLIC_UTILS_SERVICE || "http://localhost:5001";
+export const auth_service =
+  process.env.NEXT_PUBLIC_AUTH_SERVICE || "http://localhost:5000";
+export const user_service =
+  process.env.NEXT_PUBLIC_USER_SERVICE || "http://localhost:5002";
+export const job_service =
+  process.env.NEXT_PUBLIC_JOB_SERVICE || "http://localhost:5003";
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
