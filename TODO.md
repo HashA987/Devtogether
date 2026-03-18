@@ -1,12 +1,1 @@
-# Task: Fix Jobseeker Registration Resume Issue - Make Resume Optional
-
-## Completed Steps:
-
-1. ✅ Gather file contents and create detailed edit plan.
-2. ✅ Edit frontend register page: Added FormData.append for resume file.
-3. ✅ Edit backend auth controller: Made resume optional for jobseeker.
-4. ✅ Verified changes and task completion.
-
-## Status: Complete ✅
-
-**Original code preserved in diffs above for easy restoration if needed.**
+# TODO: Fix line 28 in register page (COMPLETED)\n\n✅ 1. Create TODO.md with steps\n✅ 2. Edit frontend/src/app/(auth)/register/page.tsx to fix line 28 syntax error (replaced malformed useState with `const [name, setName] = useState(\"\");`)\n✅ 3. Verified: File re-read, syntax fixed, no errors in diff, form logic intact (line now correct)\n✅ 4. Updated TODO.md with progress\n✅ 5. Task complete - line 28 fixed.\n\nLine 28 fixed successfully. The register form should now compile without syntax errors.
