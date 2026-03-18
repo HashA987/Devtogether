@@ -51,6 +51,9 @@ const RegisterPage = () => {
     formData.append("email", email);
     formData.append("password", password);
     formData.append("phoneNumber", phoneNumber);
+    if (resume) {
+      formData.append("file", resume);
+    }
 
     try {
       const { data } = await axios.post(

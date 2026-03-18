@@ -32,26 +32,27 @@ export const registerUser = TryCatch(async (req, res, next) => {
 
     registeredUser = user;
   } else if (role === "jobseeker") {
+    let resumeUrl = null;
+    let resumePublicId = null;
     const file = req.file;
 
-    if (!file) {
-      throw new ErrorHandler(400, "Resume is reuired");
+    if (file) {
+      const fileBuffer = getBuffer(file);
+      if (fileBuffer.content) {
+        const { data } = await axios.post(
+          `${process.env.UPLOAD_SERVICE}/api/utils/upload`,
+          { buffer: fileBuffer.content },
+        );
+        resumeUrl = data.url;
+        resumePublicId = data.public_id;
+      } else {
+        console.warn("Failed to generate file buffer");
+      }
     }
-
-    const fileBuffer = getBuffer(file);
-
-    if (!file || !fileBuffer.content) {
-      throw new ErrorHandler(500, "Failed to generated file");
-    }
-
-    const { data } = await axios.post(
-      `${process.env.UPLOAD_SERVICE}/api/utils/upload`,
-      { buffer: fileBuffer.content },
-    );
 
     const [user] =
       await sql`INSERT INTO users(name,email,password,phone_number, role,resume,resume_public_id) VALUES
-      (${name},${email},${hashPassword},${phoneNumber},${role},${data.url},${data.public_id}) RETURNING
+      (${name},${email},${hashPassword},${phoneNumber},${role},${resumeUrl},${resumePublicId}) RETURNING
       user_id, name,email,phone_number,role,resume,created_at`;
 
     registeredUser = user;
